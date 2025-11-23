@@ -105,6 +105,12 @@ const SEQUENTIAL_QUESTS = [
     ],
   },
 ];
+const DEFAULT_USERS = [
+  { id: "me", name: "Ты", points: 0, status: "Новичок", role: "ученик" },
+  { id: "lena", name: "Лена", points: 820, status: "Создатель", role: "ментор" },
+  { id: "arsen", name: "Арсен", points: 690, status: "Практик", role: "аналитик" },
+  { id: "mira", name: "Мира", points: 540, status: "Аналитик", role: "исследователь" },
+];
 
 const DEFAULT_USERS = [
   { id: "me", name: "Ты", points: 0, status: "Новичок", role: "ученик" },
