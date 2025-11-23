@@ -1,8 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-// Storage helpers
-const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k) || "null"); return v ?? d; } catch { return d; } };
+// Storage helpers (safe for environments without window/localStorage)
+const hasStorage = typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+const save = (k, v) => { if (!hasStorage) return; try { window.localStorage.setItem(k, JSON.stringify(v)); } catch { /* ignore */ } };
+const load = (k, d) => {
+  if (!hasStorage) return d;
+  try {
+    const raw = window.localStorage.getItem(k);
+    if (raw === null) return d;
+    const parsed = JSON.parse(raw);
+    return parsed ?? d;
+  } catch {
+    return d;
+  }
+};
 
 const CATEGORIES = [
   { id: "thinking", title: "Мышление", desc: "Структура, логика, причинно‑следственные связи." },
