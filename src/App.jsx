@@ -128,8 +128,8 @@ const Card = ({ children, theme }) => (
 );
 const Button = ({ children, onClick, variant = "solid", theme }) => {
   const palette = theme === "dark"
-    ? { solid: "bg-emerald-500 text-white hover:bg-emerald-400", ghost: "border border-zinc-700 hover:border-zinc-500" }
-    : { solid: "bg-emerald-500 text-white hover:bg-emerald-400", ghost: "border border-zinc-300 hover:border-zinc-500" };
+    ? { solid: "bg-white text-zinc-900 hover:bg-zinc-100", ghost: "border border-zinc-700 text-white hover:border-zinc-500" }
+    : { solid: "bg-zinc-900 text-white hover:bg-black", ghost: "border border-zinc-300 text-zinc-900 hover:border-zinc-500" };
   return (
     <button
       className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${palette[variant]}`}
@@ -140,9 +140,12 @@ const Button = ({ children, onClick, variant = "solid", theme }) => {
     </button>
   );
 };
-const ProgressBar = ({ value }) => (
-  <div className="w-full h-3 rounded-full bg-emerald-100 overflow-hidden border border-emerald-300">
-    <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600" style={{ width: `${Math.min(100, Math.max(0, value))}%` }} />
+const ProgressBar = ({ value, theme }) => (
+  <div className={`w-full h-3 rounded-full overflow-hidden border ${theme === "dark" ? "bg-zinc-800 border-zinc-700" : "bg-zinc-100 border-zinc-300"}`}>
+    <div
+      className={`h-full ${theme === "dark" ? "bg-white" : "bg-black"}`}
+      style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+    />
   </div>
 );
 
@@ -159,7 +162,7 @@ const Navigation = ({ tab, setTab, status, points, theme, setTheme }) => {
   return (
     <div className={`flex items-center justify-between pb-4 mb-8 border-b ${theme === "dark" ? "border-zinc-800" : "border-zinc-200"}`}>
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-full bg-emerald-500" />
+        <div className={`w-9 h-9 rounded-full ${theme === "dark" ? "bg-white" : "bg-black"}`} />
         <div className="text-xl font-bold tracking-tight">NOESIS</div>
       </div>
       <div className="flex flex-wrap gap-2">
@@ -221,9 +224,9 @@ const Home = ({ setTab, theme }) => {
     <Section>
       <div className="space-y-10">
         <div className={`rounded-3xl border p-10 flex flex-col gap-6 text-center ${theme === "dark" ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-200"}`}>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-emerald-500">
-            <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200">Платформа для развития</span>
-            <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200">Мышление • Бизнес • Финансы</span>
+          <div className={`flex flex-wrap justify-center gap-4 text-sm ${theme === "dark" ? "text-zinc-200" : "text-zinc-600"}`}>
+            <span className={`px-3 py-1 rounded-full border ${theme === "dark" ? "bg-zinc-800 border-zinc-700" : "bg-zinc-100 border-zinc-200"}`}>Платформа для развития</span>
+            <span className={`px-3 py-1 rounded-full border ${theme === "dark" ? "bg-zinc-800 border-zinc-700" : "bg-zinc-100 border-zinc-200"}`}>Мышление • Бизнес • Финансы</span>
           </div>
           <div className="space-y-3">
             <h1 className="text-4xl md:text-5xl font-bold">Будь лучше вчерашнего себя</h1>
@@ -272,7 +275,7 @@ const Library = ({ lessons, onComplete, onOpenLesson, completed, theme }) => (
               <div className="text-lg font-semibold">{lesson.title}</div>
               <div className="text-xs text-zinc-500">{lesson.category} • {lesson.kind} • {lesson.duration} мин</div>
             </div>
-            {completed[lesson.id] && <span className="text-emerald-500 text-sm">✔</span>}
+            {completed[lesson.id] && <span className="text-sm">✔</span>}
           </div>
           <div className="mt-3 flex gap-2">
             <Button theme={theme} onClick={() => onOpenLesson(lesson)}>Открыть</Button>
@@ -332,7 +335,7 @@ const QuizCard = ({ quiz, onSubmit, previousResult, theme }) => {
             <div className="text-sm font-medium">{idx + 1}. {q.q}</div>
             <div className="grid gap-2">
               {q.options.map((opt, i) => (
-                <label key={i} className={`flex items-center gap-2 rounded-xl border p-2 ${answers[idx] === i ? "border-emerald-400 bg-emerald-50" : "border-zinc-200"}`}>
+                <label key={i} className={`flex items-center gap-2 rounded-xl border p-2 ${answers[idx] === i ? "border-zinc-500 bg-zinc-100" : theme === "dark" ? "border-zinc-800" : "border-zinc-200"}`}>
                   <input type="radio" name={`${quiz.id}-${idx}`} checked={answers[idx] === i} onChange={() => setAnswers((a) => ({ ...a, [idx]: i }))} />
                   <span>{opt}</span>
                 </label>
@@ -345,7 +348,7 @@ const QuizCard = ({ quiz, onSubmit, previousResult, theme }) => {
           {previousResult && (
             <span className="text-sm text-zinc-500">Было: {previousResult.correct}/{previousResult.total}</span>
           )}
-          {result && <span className="text-sm text-emerald-500">+{result.delta} очков</span>}
+          {result && <span className="text-sm text-zinc-500">+{result.delta} очков</span>}
         </div>
       </div>
     </Card>
@@ -377,7 +380,7 @@ const StepBlock = ({ step, locked, done, theme, onSubmit }) => {
           <div className="text-xs text-zinc-500">{step.description}</div>
         </div>
         <div className="flex items-center gap-2">
-          {done && <span className="text-emerald-500 text-sm">{done.correct}/{done.total}</span>}
+          {done && <span className="text-sm text-zinc-500">{done.correct}/{done.total}</span>}
           <Button theme={theme} variant="ghost" onClick={() => !locked && setOpen((v) => !v)}>
             {locked ? "Закрыто" : open ? "Скрыть" : "Пройти"}
           </Button>
@@ -390,7 +393,16 @@ const StepBlock = ({ step, locked, done, theme, onSubmit }) => {
               <div className="text-sm mb-2">{q.q}</div>
               <div className="grid gap-2 mb-2">
                 {q.options.map((opt, i) => (
-                  <label key={i} className={`flex items-center gap-2 rounded-lg border p-2 ${answers[idx] === i ? "border-emerald-400 bg-emerald-50" : "border-zinc-200"}`}>
+                  <label
+                    key={i}
+                    className={`flex items-center gap-2 rounded-lg border p-2 ${answers[idx] === i
+                      ? theme === "dark"
+                        ? "border-zinc-400 bg-zinc-800"
+                        : "border-zinc-500 bg-zinc-100"
+                      : theme === "dark"
+                        ? "border-zinc-800"
+                        : "border-zinc-200"}`}
+                  >
                     <input type="radio" name={`${step.id}-${idx}`} checked={answers[idx] === i} onChange={() => setAnswers((a) => ({ ...a, [idx]: i }))} />
                     <span>{opt}</span>
                   </label>
@@ -400,7 +412,7 @@ const StepBlock = ({ step, locked, done, theme, onSubmit }) => {
           ))}
           <div className="flex items-center gap-2">
             <Button theme={theme} onClick={submit}>Ответить</Button>
-            {result && <span className="text-sm text-emerald-500">+{result.delta} очков</span>}
+            {result && <span className="text-sm text-zinc-500">+{result.delta} очков</span>}
           </div>
         </div>
       )}
@@ -442,7 +454,10 @@ const Profile = ({ profile, status, nextStatus, achievements, theme }) => (
           <div className="flex items-center justify-between text-sm">
             <span>Очки</span><span className="font-semibold">{profile.points}</span>
           </div>
-          <ProgressBar value={nextStatus ? Math.min(100, Math.round((profile.points / nextStatus.min) * 100)) : 100} />
+          <ProgressBar
+            theme={theme}
+            value={nextStatus ? Math.min(100, Math.round((profile.points / nextStatus.min) * 100)) : 100}
+          />
           {nextStatus ? (
             <div className="text-xs text-zinc-500">До уровня «{nextStatus.name}» осталось {nextStatus.min - profile.points} очков</div>
           ) : (
@@ -456,7 +471,7 @@ const Profile = ({ profile, status, nextStatus, achievements, theme }) => (
         <div className="text-lg font-semibold mb-2">Достижения</div>
         <div className="grid gap-2">
           {achievements.map((a) => (
-            <div key={a.title} className={`flex items-center gap-3 rounded-xl border p-3 ${a.earned ? "border-emerald-300 bg-emerald-50" : "border-zinc-200"}`}>
+            <div key={a.title} className={`flex items-center gap-3 rounded-xl border p-3 ${a.earned ? (theme === "dark" ? "border-zinc-600 bg-zinc-900" : "border-zinc-400 bg-zinc-50") : theme === "dark" ? "border-zinc-800" : "border-zinc-200"}`}>
               <span className="text-2xl">{a.icon}</span>
               <div>
                 <div className="font-semibold">{a.title}</div>
@@ -481,12 +496,12 @@ const Community = ({ users, onOpen }) => (
     <h2 className="text-2xl font-semibold">Сообщество</h2>
     <div className="grid md:grid-cols-2 gap-3">
       {users.map((u) => (
-        <div key={u.id} className="flex items-center justify-between rounded-2xl border p-3 cursor-pointer border-zinc-200 hover:border-emerald-300" onClick={() => onOpen(u)}>
+        <div key={u.id} className="flex items-center justify-between rounded-2xl border p-3 cursor-pointer border-zinc-200 hover:border-zinc-400" onClick={() => onOpen(u)}>
           <div>
             <div className="font-semibold">{u.name}</div>
             <div className="text-xs text-zinc-500">{u.status} • {u.role}</div>
           </div>
-          <div className="font-semibold text-emerald-600">{u.points} pts</div>
+          <div className="font-semibold text-zinc-700">{u.points} pts</div>
         </div>
       ))}
     </div>
