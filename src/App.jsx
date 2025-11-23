@@ -29,7 +29,6 @@ const STATUSES = [
   { min: 900, name: "Создатель" },
   { min: 1400, name: "Архитектор" },
 ];
-
 const BASE_LESSONS = [
   {
     id: "biz-article",
@@ -105,7 +104,6 @@ const SEQUENTIAL_QUESTS = [
     ],
   },
 ];
-
 const DEFAULT_USERS = [
   { id: "me", name: "Ты", points: 0, status: "Новичок", role: "ученик" },
   { id: "lena", name: "Лена", points: 820, status: "Создатель", role: "ментор" },
@@ -262,7 +260,6 @@ const QuizCard = ({ quiz, onSubmit, previousResult, theme }) => {
     const outcome = onSubmit(quiz, Object.values(answers));
     setResult(outcome);
   };
-
   return (
     <Card theme={theme}>
       <div className="text-lg font-semibold mb-2">{quiz.title}</div>
@@ -291,7 +288,6 @@ const QuizCard = ({ quiz, onSubmit, previousResult, theme }) => {
     </Card>
   );
 };
-
 const StepBlock = ({ step, locked, done, theme, onSubmit }) => {
   const [open, setOpen] = useState(false);
   const [answers, setAnswers] = useState({});
@@ -347,7 +343,6 @@ const StepBlock = ({ step, locked, done, theme, onSubmit }) => {
     </div>
   );
 };
-
 const SequentialCard = ({ quest, onSubmitStep, progress, theme }) => {
   const isStepUnlocked = (idx) => idx === 0 || progress[quest.steps[idx - 1].id];
 
