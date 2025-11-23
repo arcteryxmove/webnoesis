@@ -116,19 +116,23 @@ const DEFAULT_USERS = [
 // ---------- ui helpers ----------
 const Section = ({ children }) => <div className="space-y-4">{children}</div>;
 const Card = ({ children, theme }) => (
-  <div className={`rounded-2xl border p-6 ${theme === "dark" ? "border-white/20 bg-black" : "border-black/10 bg-white shadow"}`}>
+  <div
+    className={`rounded-2xl border p-6 sm:p-7 ${
+      theme === "dark" ? "border-white/20 bg-black" : "border-black/10 bg-white shadow"
+    }`}
+  >
     {children}
   </div>
 );
 const Button = ({ children, onClick, variant = "solid", theme }) => {
   const palette = theme === "dark"
-    ? { solid: "bg-emerald-500 text-white hover:bg-emerald-400", ghost: "border border-zinc-700 hover:border-zinc-500" }
-    : { solid: "bg-emerald-500 text-white hover:bg-emerald-400", ghost: "border border-zinc-300 hover:border-zinc-500" };
     ? { solid: "bg-white text-black hover:bg-gray-100", ghost: "border border-white/40 text-white hover:border-white" }
     : { solid: "bg-black text-white hover:bg-neutral-800", ghost: "border border-black/30 text-black hover:border-black" };
   return (
     <button
-      className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${palette[variant]}`}
+      className={`px-4 py-2 rounded-xl text-sm font-semibold transition inline-flex items-center justify-center whitespace-nowrap ${
+        palette[variant]
+      }`}
       onClick={onClick}
       type="button"
     >
@@ -159,12 +163,16 @@ const Navigation = ({ tab, setTab, status, points, theme, setTheme }) => {
     { id: "admin", label: "Админ" },
   ];
   return (
-    <div className={`flex items-center justify-between pb-4 mb-8 border-b ${theme === "dark" ? "border-white/15" : "border-black/10"}`}>
+    <div
+      className={`flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between pb-4 mb-8 border-b ${
+        theme === "dark" ? "border-white/15" : "border-black/10"
+      }`}
+    >
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-full bg-emerald-500" />
         <div className="text-xl font-bold tracking-tight">NOESIS</div>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex gap-2 overflow-x-auto py-1 pr-1 -mr-1" aria-label="Основная навигация">
         {items.map((item) => (
           <Button
             key={item.id}
@@ -176,7 +184,7 @@ const Navigation = ({ tab, setTab, status, points, theme, setTheme }) => {
           </Button>
         ))}
       </div>
-      <div className="flex items-center gap-3 text-sm">
+      <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className="text-gray-500">Статус: <span className="font-semibold text-black dark:text-white">{status}</span></span>
         <span className="text-gray-500">Очки: <span className="font-semibold text-black dark:text-white">{points}</span></span>
         <Button
@@ -222,10 +230,6 @@ const Home = ({ setTab, theme }) => {
   return (
     <Section>
       <div className="space-y-10">
-        <div className={`rounded-3xl border p-10 flex flex-col gap-6 text-center ${theme === "dark" ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-200"}`}>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-emerald-500">
-            <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200">Платформа для развития</span>
-            <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200">Мышление • Бизнес • Финансы</span>
         <div className={`rounded-3xl border p-10 flex flex-col gap-6 text-center ${theme === "dark" ? "bg-black border-white/20" : "bg-white border-black/10"}`}>
           <div className={`flex flex-wrap justify-center gap-4 text-sm ${theme === "dark" ? "text-gray-200" : "text-gray-600"}`}>
             <span className={`px-3 py-1 rounded-full border ${theme === "dark" ? "border-white/25" : "border-black/10"}`}>Платформа для развития</span>
@@ -295,8 +299,12 @@ const Library = ({ lessons, onComplete, onOpenLesson, completed, theme }) => (
 const LessonPage = ({ lesson, onClose, onComplete, done, theme }) => {
   if (!lesson) return null;
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-20">
-      <div className={`max-w-3xl w-full rounded-3xl border p-6 space-y-4 ${theme === "dark" ? "bg-black border-white/20" : "bg-white border-black/10"}`}>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-20 px-3">
+      <div
+        className={`max-w-3xl w-full rounded-3xl border p-6 space-y-4 max-h-[90vh] overflow-y-auto ${
+          theme === "dark" ? "bg-black border-white/20" : "bg-white border-black/10"
+        }`}
+      >
         <div className="flex items-center justify-between">
           <div>
             <div className="text-2xl font-bold">{lesson.title}</div>
@@ -307,7 +315,11 @@ const LessonPage = ({ lesson, onClose, onComplete, done, theme }) => {
             <Button theme={theme} variant="ghost" onClick={onClose}>Закрыть</Button>
           </div>
         </div>
-        <div className={`aspect-video rounded-2xl border flex items-center justify-center ${theme === "dark" ? "bg-black border-white/15 text-gray-400" : "bg-white border-black/10 text-gray-600"}`}>
+        <div
+          className={`aspect-video rounded-2xl border flex items-center justify-center text-center text-sm ${
+            theme === "dark" ? "bg-black border-white/15 text-gray-400" : "bg-white border-black/10 text-gray-600"
+          }`}
+        >
           Пустое окно под видео или материал
         </div>
         {lesson.content && (
@@ -490,7 +502,6 @@ const Community = ({ users, onOpen, theme }) => (
     <h2 className="text-2xl font-semibold">Сообщество</h2>
     <div className="grid md:grid-cols-2 gap-3">
       {users.map((u) => (
-        <div key={u.id} className="flex items-center justify-between rounded-2xl border p-3 cursor-pointer border-zinc-200 hover:border-emerald-300" onClick={() => onOpen(u)}>
         <div
           key={u.id}
           className={`flex items-center justify-between rounded-2xl border p-3 cursor-pointer ${theme === "dark" ? "border-white/20 hover:border-white/40" : "border-black/10 hover:border-black/40"}`}
@@ -510,8 +521,12 @@ const Community = ({ users, onOpen, theme }) => (
 const MemberModal = ({ user, onClose, theme }) => {
   if (!user) return null;
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-30">
-      <div className={`w-full max-w-md rounded-3xl border p-6 space-y-3 ${theme === "dark" ? "bg-black border-white/20" : "bg-white border-black/10"}`}>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-30 px-3">
+      <div
+        className={`w-full max-w-md rounded-3xl border p-6 space-y-3 max-h-[80vh] overflow-y-auto ${
+          theme === "dark" ? "bg-black border-white/20" : "bg-white border-black/10"
+        }`}
+      >
         <div className="flex items-start justify-between">
           <div>
             <div className="text-xl font-bold">{user.name}</div>
@@ -536,21 +551,21 @@ const Admin = ({ theme, onAddLesson, onAddUser, users, onRemoveUser }) => {
         <Card theme={theme}>
           <div className="text-lg font-semibold mb-2">Добавить материал</div>
           <div className="grid gap-2 text-sm">
-            <input className={`border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Название" value={material.title} onChange={(e) => setMaterial({ ...material, title: e.target.value })} />
-            <input className={`border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Категория" value={material.category} onChange={(e) => setMaterial({ ...material, category: e.target.value })} />
-            <input type="number" className={`border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Длительность" value={material.duration} onChange={(e) => setMaterial({ ...material, duration: Number(e.target.value) })} />
-            <input className={`border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Тип" value={material.kind} onChange={(e) => setMaterial({ ...material, kind: e.target.value })} />
+            <input className={`w-full border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Название" value={material.title} onChange={(e) => setMaterial({ ...material, title: e.target.value })} />
+            <input className={`w-full border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Категория" value={material.category} onChange={(e) => setMaterial({ ...material, category: e.target.value })} />
+            <input type="number" className={`w-full border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Длительность" value={material.duration} onChange={(e) => setMaterial({ ...material, duration: Number(e.target.value) })} />
+            <input className={`w-full border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Тип" value={material.kind} onChange={(e) => setMaterial({ ...material, kind: e.target.value })} />
             <Button theme={theme} onClick={() => { if (!material.title) return; onAddLesson(material); setMaterial({ title: "", category: "Бизнес", duration: 5, kind: "Статья" }); }}>Сохранить</Button>
           </div>
         </Card>
         <Card theme={theme}>
           <div className="text-lg font-semibold mb-2">Пользователи</div>
           <div className="grid gap-2 text-sm">
-            <input className={`border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="ID" value={user.id} onChange={(e) => setUser({ ...user, id: e.target.value })} />
-            <input className={`border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Имя" value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })} />
-            <input type="number" className={`border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Очки" value={user.points} onChange={(e) => setUser({ ...user, points: Number(e.target.value) })} />
-            <input className={`border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Статус" value={user.status} onChange={(e) => setUser({ ...user, status: e.target.value })} />
-            <input className={`border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Роль" value={user.role} onChange={(e) => setUser({ ...user, role: e.target.value })} />
+            <input className={`w-full border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="ID" value={user.id} onChange={(e) => setUser({ ...user, id: e.target.value })} />
+            <input className={`w-full border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Имя" value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })} />
+            <input type="number" className={`w-full border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Очки" value={user.points} onChange={(e) => setUser({ ...user, points: Number(e.target.value) })} />
+            <input className={`w-full border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Статус" value={user.status} onChange={(e) => setUser({ ...user, status: e.target.value })} />
+            <input className={`w-full border rounded-xl px-3 py-2 ${theme === "dark" ? "bg-black border-white/20 text-white" : "bg-white border-black/15"}`} placeholder="Роль" value={user.role} onChange={(e) => setUser({ ...user, role: e.target.value })} />
             <Button theme={theme} onClick={() => { if (!user.id || !user.name) return; onAddUser(user); setUser({ id: "", name: "", points: 0, status: "Новичок", role: "ученик" }); }}>Добавить</Button>
           </div>
         </Card>
