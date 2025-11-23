@@ -233,7 +233,10 @@ function useModel() {
   const removeUser = (id) => setUsers(arr => arr.filter(u => u.id !== id));
   const updateUserPoints = (id, points) => setUsers(arr => arr.map(u => u.id === id ? { ...u, points } : u));
 
-  const resetAll = () => { localStorage.clear(); window.location.reload(); };
+  const resetAll = () => {
+    if (hasStorage) window.localStorage.clear();
+    if (typeof window !== "undefined") window.location.reload();
+  };
 
   return { profile, status, tab, setTab, filter, setFilter, completeLesson, submitQuiz, submitSequence, resetAll, isAdmin, setIsAdmin, libraryExtra, setLibraryExtra, quizzesExtra, setQuizzesExtra, users, addUser, removeUser, updateUserPoints };
 }
