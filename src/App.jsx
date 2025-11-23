@@ -29,6 +29,7 @@ const STATUSES = [
   { min: 900, name: "Создатель" },
   { min: 1400, name: "Архитектор" },
 ];
+
 const BASE_LESSONS = [
   {
     id: "biz-article",
@@ -111,6 +112,13 @@ const DEFAULT_USERS = [
   { id: "mira", name: "Мира", points: 540, status: "Аналитик", role: "исследователь" },
 ];
 
+const DEFAULT_USERS = [
+  { id: "me", name: "Ты", points: 0, status: "Новичок", role: "ученик" },
+  { id: "lena", name: "Лена", points: 820, status: "Создатель", role: "ментор" },
+  { id: "arsen", name: "Арсен", points: 690, status: "Практик", role: "аналитик" },
+  { id: "mira", name: "Мира", points: 540, status: "Аналитик", role: "исследователь" },
+];
+
 // ---------- ui helpers ----------
 const Section = ({ children }) => <div className="space-y-4">{children}</div>;
 const Card = ({ children, theme }) => (
@@ -181,20 +189,74 @@ const Navigation = ({ tab, setTab, status, points, theme, setTheme }) => {
   );
 };
 
-const Home = ({ setTab, theme }) => (
-  <Section>
-    <div className="text-center space-y-4">
-      <h1 className="text-4xl font-bold">Стань сильнее в мышлении</h1>
-      <p className="text-zinc-500 max-w-2xl mx-auto">
-        Практические материалы и квесты по мышлению, бизнесу, финансам и психологии. Получай очки, повышай статус и собирай достижения.
-      </p>
-      <div className="flex justify-center gap-3">
-        <Button theme={theme} onClick={() => setTab("library")}>Перейти в библиотеку</Button>
-        <Button theme={theme} variant="ghost" onClick={() => setTab("quests")}>Пройти квест</Button>
+const Home = ({ setTab, theme }) => {
+  const featureCards = [
+    {
+      title: "Библиотека знаний",
+      text: "Уроки, статьи и практики: предпринимательство, мышление, финансы, психология.",
+      action: () => setTab("library"),
+      actionLabel: "Открыть библиотеку",
+    },
+    {
+      title: "Интеллектуальные квесты",
+      text: "Проходи последовательные тесты, получай очки и закрепляй навыки.",
+      action: () => setTab("quests"),
+      actionLabel: "Пройти квест",
+    },
+    {
+      title: "Профиль развития",
+      text: "Отслеживай прогресс, рост статуса и собранные достижения.",
+      action: () => setTab("profile"),
+      actionLabel: "Мой прогресс",
+    },
+    {
+      title: "Сообщество",
+      text: "Смотри топ участников, открывай их профили и вдохновляйся результатами.",
+      action: () => setTab("community"),
+      actionLabel: "К сообществу",
+    },
+  ];
+
+  return (
+    <Section>
+      <div className="space-y-10">
+        <div className={`rounded-3xl border p-10 flex flex-col gap-6 text-center ${theme === "dark" ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-200"}`}>
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-emerald-500">
+            <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200">Платформа для развития</span>
+            <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200">Мышление • Бизнес • Финансы</span>
+          </div>
+          <div className="space-y-3">
+            <h1 className="text-4xl md:text-5xl font-bold">Будь лучше вчерашнего себя</h1>
+            <p className="text-zinc-500 max-w-3xl mx-auto text-lg">
+              Платформа для практиков, которые хотят системно прокачивать навыки мышления и осознанности.
+            </p>
+            <p className="text-zinc-400 max-w-2xl mx-auto text-sm">
+              «Без умных ограничений, нельзя ничего делать», — Daniel Dennett
+            </p>
+          </div>
+          <div className="flex justify-center gap-3 flex-wrap">
+            <Button theme={theme} onClick={() => setTab("library")}>Открыть библиотеку</Button>
+            <Button theme={theme} variant="ghost" onClick={() => setTab("quests")}>Пройти квест</Button>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          {featureCards.map((card) => (
+            <Card key={card.title} theme={theme}>
+              <div className="flex flex-col gap-3 text-left">
+                <div className="text-lg font-semibold">{card.title}</div>
+                <p className="text-sm text-zinc-500 leading-relaxed">{card.text}</p>
+                <div>
+                  <Button theme={theme} onClick={card.action}>{card.actionLabel}</Button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
-  </Section>
-);
+    </Section>
+  );
+};
 
 const Library = ({ lessons, onComplete, onOpenLesson, completed, theme }) => (
   <Section>
@@ -260,6 +322,7 @@ const QuizCard = ({ quiz, onSubmit, previousResult, theme }) => {
     const outcome = onSubmit(quiz, Object.values(answers));
     setResult(outcome);
   };
+
   return (
     <Card theme={theme}>
       <div className="text-lg font-semibold mb-2">{quiz.title}</div>
@@ -288,6 +351,7 @@ const QuizCard = ({ quiz, onSubmit, previousResult, theme }) => {
     </Card>
   );
 };
+
 const StepBlock = ({ step, locked, done, theme, onSubmit }) => {
   const [open, setOpen] = useState(false);
   const [answers, setAnswers] = useState({});
@@ -343,6 +407,7 @@ const StepBlock = ({ step, locked, done, theme, onSubmit }) => {
     </div>
   );
 };
+
 const SequentialCard = ({ quest, onSubmitStep, progress, theme }) => {
   const isStepUnlocked = (idx) => idx === 0 || progress[quest.steps[idx - 1].id];
 
